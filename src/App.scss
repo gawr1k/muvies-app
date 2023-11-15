@@ -1,0 +1,34 @@
+.container {
+    width: 1010px;
+    background: #FFF;
+    min-height: 1147px;
+    margin: 0 auto;
+}
+
+.content {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+.menu-center {
+    text-align: center; 
+    padding-top: 13px;
+    margin-bottom: 19.23px;
+    display: flex;
+    justify-content: center;
+  }
+
+
+
+main {
+    margin:0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+footer{
+    text-align: center; 
+    margin-top: 36px;
+    padding-bottom: 17px;
+}

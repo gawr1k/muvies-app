@@ -1,21 +1,22 @@
 import Access_key from "./api-key"
-import React from "react";
 
 
 
-const SwapiService = () => {
+const ApiClient = (search, page) => {
 
-    const [data, setData] = React.useState(null);
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: Access_key
+    }
+  };
   
-    React.useEffect(() => {
-      fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${Access_key}`)
-        .then(res => res.json())
-        .then(json => setData(json.results))
-        .catch(err => console.log(err));
-    }, []);
+  const result = fetch(`https://api.themoviedb.org/3/search/movie?query=${search}&page=${page}`, options)
+    .then(response => response.json())
+    .then(response => response)
+    .catch(err => console.error(err));
+    return result;
+}
   
-    return data;
-  
-  }
-  
-  export default SwapiService;
+  export default ApiClient;
