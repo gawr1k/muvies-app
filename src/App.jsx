@@ -42,6 +42,7 @@ function App() {
   const renderContent = () => {
     if (menustate === '/search') {
       return (
+        <>
         <main>
           {data.results && data.results.map((item)=>{
             return(
@@ -63,10 +64,18 @@ function App() {
             )
           })}
         </main>
+        <footer>
+        {data.total_pages > 1 && (
+          <PaginationsPages
+            page={currentPage}
+            handlePageChange={handlePageChange}
+            total = {data.total_pages}
+          />)}
+      </footer>
+        </>
       );
     } else if (menustate === '/rated') {
-      // Фильтруем данные по id фильмов, которые оценили
-      // const ratedMovies = data.results.filter(item => ratedMoviesIds.includes(item.id));
+      const showPagination = ratedMoviesIds.length > 20;
       return (
         <main>
           {ratedMoviesIds.map((item)=>{
@@ -107,17 +116,15 @@ function App() {
               placeholder="Type to search..."
             />
         </header>
-        <main>
           {renderContent()}
-        </main>
-        <footer>
+        {/* <footer>
           {data.total_pages > 1 && (
             <PaginationsPages
               page={currentPage}
               handlePageChange={handlePageChange}
               total = {data.total_pages}
             />)}
-        </footer>
+        </footer> */}
       </div>
     </div>
     
