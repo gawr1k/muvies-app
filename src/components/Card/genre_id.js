@@ -34,7 +34,12 @@ const GenreId = () => {
     }, []);
   
     const getGenreNamesByIds = (genreIds) => {
-      return genreIds.map((id) => genresMap[id]);
+      // Проверка на существование массива genreIds
+      if (Array.isArray(genreIds)) {
+        return genreIds.map((id) => genresMap[id]);
+      } else {
+        return [];
+      }
     };
   
     return { genresMap, getGenreNamesByIds };
