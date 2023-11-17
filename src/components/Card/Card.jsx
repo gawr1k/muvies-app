@@ -9,7 +9,8 @@ const Card = ({
   getGenreNamesByIds,
   ratedMoviesIds,
   setRatedMoviesIds,
-}) => {
+  vote_average,
+  }) => {
 
   const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
   const BASE_URL = 'https://image.tmdb.org/t/p/original';
@@ -48,14 +49,24 @@ const Card = ({
     imgSrc = PLACEHOLDER_IMAGE;
   }
 
+  const getBorderColor = () => {
+    if (vote_average < 3) {
+      return 'red';
+    } else if (vote_average < 7) {
+      return '#E9D100';
+    } else {
+      return 'green';
+    }
+  };
+
   return (
-    <div className='card d-flex justify-between'>
+    <div className='card'>
       <div className='card__img'>
-        <img width={183} height={281} src={imgSrc} alt='' />
+        <img src={imgSrc} alt='' />
       </div>
       <div className='card__description '>
         <h1 className='card__description__title'>{item?.original_title || 'N/A'}</h1>
-        <div className='card__description__rating'>
+        <div className='card__description__rating' style={{ borderColor: getBorderColor() }}>
           {item?.vote_average ? item.vote_average.toFixed(1) : 'N/A'}
         </div>
         <h3 className='card__description__release__date'>{item?.release_date || 'N/A'}</h3>

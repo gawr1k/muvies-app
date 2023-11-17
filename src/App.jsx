@@ -58,6 +58,12 @@ const App = () => {
     if (menustate === '/search') {
       return (
         <>
+          <div className="input-container">
+            <Input
+              onChange={inputHandler}
+              placeholder='Type to search...'
+            />
+          </div>
           <main>
           {data.results &&
             data.results.map((item) => {
@@ -144,10 +150,10 @@ const App = () => {
           <div className='menu-center'>
             <MuvieMenu className='menu-center' onMenuClick={onMenuClick} />
           </div>
-          <Input
+          {/* <Input
             onChange={inputHandler}
             placeholder='Type to search...'
-          />
+          /> */}
         </header>
         {renderContent()}
       </div>
