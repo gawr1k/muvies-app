@@ -5,19 +5,12 @@ import { Rate } from 'antd';
 
 const Card = ({
   item,
-  id,
-  original_title,
-  overview,
-  release_date,
   poster_path,
-  genre_ids,
-  vote_average,
   getGenreNamesByIds,
   ratedMoviesIds,
   setRatedMoviesIds,
 }) => {
 
-  const genreNames = getGenreNamesByIds(genre_ids) || [];
   const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
   const BASE_URL = 'https://image.tmdb.org/t/p/original';
 
@@ -67,9 +60,10 @@ const Card = ({
         </div>
         <h3 className='card__description__release__date'>{item?.release_date || 'N/A'}</h3>
         <div className='card__description__genre d-flex'>
-          {getGenreNamesByIds(item?.genre_ids).map((genre, index) => (
-            <div key={index}>{genre}</div>
-          ))}
+          {getGenreNamesByIds(item?.genre_ids).map((genre, index) => { // что то нужно придумать
+            console.log(getGenreNamesByIds(item.genre_ids)); // Добавьте эту строку
+            return <div key={index}>{genre}</div>;
+          })}
         </div>
         <p>{item?.overview || 'N/A'}</p>
         <div className='card__description__rate'>

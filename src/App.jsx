@@ -1,6 +1,6 @@
 import './App.scss';
 import React, { useEffect, useState } from 'react';
-import GenreId from './components/Card/genre_id';
+import getGenreNamesByIds from './components/Card/genre_id';
 import ApiClient from './components/ApiClient/ApiClient';
 import Card from './components/Card/Card';
 import MuvieMenu from './components/Menu/Menu';
@@ -13,11 +13,15 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ratedMoviesIds, setRatedMoviesIds] = useState([]);
   const [menustate, setMenuState] = useState('/search');
-  const { genresMap, getGenreNamesByIds } = GenreId();
+  // const { genresMap, getGenreNamesByIds } = GenreId();
 
   useEffect(() => {
     ApiClient(searchTerm, currentPage).then((data) => setData(data));
   }, [searchTerm, currentPage]);
+
+  // useEffect(() => {
+  //   console.log('Genres Map:', genresMap);
+  // }, []);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -55,8 +59,10 @@ const App = () => {
       return (
         <>
           <main>
-            {data.results &&
-              data.results.map((item) => (
+          {data.results &&
+            data.results.map((item) => {
+              // console.log(getGenreNamesByIds(item.genre_ids));
+              return (
                 <Card
                   key={item.id}
                   id={item.id}
@@ -65,14 +71,14 @@ const App = () => {
                   release_date={item.release_date}
                   poster_path={item.poster_path}
                   genre_ids={item.genre_ids}
-                  genresMap={genresMap}
                   vote_average={item.vote_average}
                   getGenreNamesByIds={getGenreNamesByIds}
                   ratedMoviesIds={ratedMoviesIds}
                   setRatedMoviesIds={setRatedMoviesIds}
                   item={item}
                 />
-              ))}
+              );
+            })}
           </main>
           <footer>
             {data.total_pages > 1 && (
@@ -108,7 +114,6 @@ const App = () => {
                   release_date={item.release_date}
                   poster_path={item.poster_path}
                   genre_ids={item.genre_ids}
-                  genresMap={genresMap}
                   vote_average={item.vote_average}
                   getGenreNamesByIds={getGenreNamesByIds}
                   ratedMoviesIds={ratedMoviesIds}
