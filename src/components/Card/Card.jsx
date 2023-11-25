@@ -10,10 +10,10 @@ const Card = ({
   ratedMoviesIds,
   setRatedMoviesIds,
   vote_average,
+  loading,
 }) => {
   const PLACEHOLDER_IMAGE = "./noPhoto.jpeg";
   const BASE_URL = "https://image.tmdb.org/t/p/original";
-  const [loading, setLoading] = React.useState(true);
   let imgSrc;
 
   const handleRate = (id, newRate, item) => {
@@ -58,6 +58,9 @@ const Card = ({
     }
   };
 
+  if (loading) {
+    return <Spin />;
+  }
   return (
     <div className="card">
       <div className="card__img">
@@ -79,7 +82,7 @@ const Card = ({
         <div className="card__description__genre d-flex">
           {getGenreNamesByIds(item?.genre_ids).map((genre, index) => {
             // что то нужно придумать
-            console.log(getGenreNamesByIds(item.genre_ids)); // Добавьте эту строку
+            console.log(getGenreNamesByIds(item.genre_ids));
             return <div key={index}>{genre}</div>;
           })}
         </div>

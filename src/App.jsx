@@ -4,8 +4,9 @@ import getGenreNamesByIds from "./components/Card/genre_id";
 import ApiClient from "./components/ApiClient/ApiClient";
 import Card from "./components/Card/Card";
 import MuvieMenu from "./components/Menu/Menu";
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 import PaginationsPages from "./components/PaginationsPages/PaginationsPages";
+import _ from "lodash";
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -13,19 +14,35 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ratedMoviesIds, setRatedMoviesIds] = useState([]);
   const [menustate, setMenuState] = useState("/search");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    ApiClient(searchTerm, currentPage).then((data) => setData(data));
+    setLoading(true);
+    ApiClient(searchTerm, currentPage).then((data) => {
+      setData(data);
+      setLoading(false); // Ensure loading is set to false after data is fetched
+    });
   }, [searchTerm, currentPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const inputHandler = (e) => {
+  // const inputHandler = (e) => {
+  //   var lowerCase = e.target.value.toLowerCase();
+  //   setSearchTerm(lowerCase);
+  //   setCurrentPage(1);
+  // };
+
+  const debouncedInputHandler = _.debounce((e) => {
     var lowerCase = e.target.value.toLowerCase();
     setSearchTerm(lowerCase);
     setCurrentPage(1);
+  }, 500); // 500 миллисекунд задержки (можете изменить значение)
+
+  const inputHandler = (e) => {
+    // Вызывается только после того, как прошло 500 миллисекунд с момента последнего вызова
+    debouncedInputHandler(e);
   };
 
   const onMenuClick = (id) => {
@@ -56,10 +73,16 @@ const App = () => {
           <div className="input-container">
             <Input onChange={inputHandler} placeholder="Type to search..." />
           </div>
-          <main>
-            {data.results &&
-              data.results.map((item) => {
-                return (
+          {loading ? (
+            <div className="example">
+              <Spin tip="Loading" size="large">
+                <div className="content" />
+              </Spin>
+            </div>
+          ) : (
+            <main>
+              {data.results &&
+                data.results.map((item) => (
                   <Card
                     key={item.id}
                     id={item.id}
@@ -74,9 +97,9 @@ const App = () => {
                     setRatedMoviesIds={setRatedMoviesIds}
                     item={item}
                   />
-                );
-              })}
-          </main>
+                ))}
+            </main>
+          )}
           <footer>
             {data.total_pages > 1 && (
               <PaginationsPages
@@ -116,6 +139,7 @@ const App = () => {
                     getGenreNamesByIds={getGenreNamesByIds}
                     ratedMoviesIds={ratedMoviesIds}
                     setRatedMoviesIds={setRatedMoviesIds}
+                    loading={loading}
                     rate={item.rate || 0}
                     onRateChange={(newRate) =>
                       handleRateChange(item.id, newRate)
@@ -143,7 +167,16 @@ const App = () => {
             <MuvieMenu className="menu-center" onMenuClick={onMenuClick} />
           </div>
         </header>
-        {/* {loading ? <Spin /> : renderContent()} */}
+        {/* <div className="input-container">
+          <Input
+            value={searchTerm}
+            onChange={inputHandler}
+            placeholder="Type to search..."
+          />
+        </div> */}
+        <div className="input-container"></div>
+        {/* {loading && <Spin />}
+        {!loading && renderContent()} */}
         {renderContent()}
       </div>
     </div>
