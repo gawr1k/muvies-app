@@ -1,0 +1,73 @@
+.container {
+  width: 1010px;
+  background: #fff;
+  min-height: 1147px;
+  margin: 0 auto;
+}
+
+.content {
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.menu-center {
+  text-align: center;
+  padding-top: 13px;
+  display: flex;
+  justify-content: center;
+}
+
+main {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+footer {
+  text-align: center;
+  margin-top: 36px;
+  padding-bottom: 17px;
+}
+
+.ant-input {
+  margin-top: 19px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 420px) {
+  .input-container {
+    margin: 0 auto;
+    width: 387px;
+    margin-top: 17.23px;
+    margin-bottom: 10px;
+  }
+  main {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .content {
+    align-items: center;
+    margin: 0 auto;
+    max-width: 420px;
+    padding: 0;
+  }
+  .container {
+    align-items: center;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .menu-center {
+    width: 420px;
+  }
+}
+.example {
+  margin: 20px 0;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  padding: 30px 50px;
+  text-align: center;
+  border-radius: 4px;
+}/*# sourceMappingURL=App.css.map */
