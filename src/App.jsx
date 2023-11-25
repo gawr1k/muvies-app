@@ -4,6 +4,7 @@ import getGenreNamesByIds from "./components/Card/genre_id";
 import ApiClient from "./components/ApiClient/ApiClient";
 import Card from "./components/Card/Card";
 import MuvieMenu from "./components/Menu/Menu";
+import NoData from "./components/NoData/NoData";
 import { Input, Spin } from "antd";
 import PaginationsPages from "./components/PaginationsPages/PaginationsPages";
 import _ from "lodash";
@@ -20,7 +21,7 @@ const App = () => {
     setLoading(true);
     ApiClient(searchTerm, currentPage).then((data) => {
       setData(data);
-      setLoading(false); // Ensure loading is set to false after data is fetched
+      setLoading(false);
     });
   }, [searchTerm, currentPage]);
 
@@ -28,20 +29,13 @@ const App = () => {
     setCurrentPage(page);
   };
 
-  // const inputHandler = (e) => {
-  //   var lowerCase = e.target.value.toLowerCase();
-  //   setSearchTerm(lowerCase);
-  //   setCurrentPage(1);
-  // };
-
   const debouncedInputHandler = _.debounce((e) => {
     var lowerCase = e.target.value.toLowerCase();
     setSearchTerm(lowerCase);
     setCurrentPage(1);
-  }, 500); // 500 миллисекунд задержки (можете изменить значение)
+  }, 500);
 
   const inputHandler = (e) => {
-    // Вызывается только после того, как прошло 500 миллисекунд с момента последнего вызова
     debouncedInputHandler(e);
   };
 
@@ -81,7 +75,7 @@ const App = () => {
             </div>
           ) : (
             <main>
-              {data.results &&
+              {data.results && data.results.length > 0 ? (
                 data.results.map((item) => (
                   <Card
                     key={item.id}
@@ -97,7 +91,10 @@ const App = () => {
                     setRatedMoviesIds={setRatedMoviesIds}
                     item={item}
                   />
-                ))}
+                ))
+              ) : (
+                <NoData />
+              )}
             </main>
           )}
           <footer>
@@ -122,31 +119,29 @@ const App = () => {
 
       return (
         <main>
-          {ratedMoviesToDisplay &&
-            ratedMoviesToDisplay.map(
-              (item) =>
-                item && (
-                  <Card
-                    item={item}
-                    key={item.id}
-                    id={item.id}
-                    original_title={item.original_title}
-                    overview={item.overview}
-                    release_date={item.release_date}
-                    poster_path={item.poster_path}
-                    genre_ids={item.genre_ids}
-                    vote_average={item.vote_average}
-                    getGenreNamesByIds={getGenreNamesByIds}
-                    ratedMoviesIds={ratedMoviesIds}
-                    setRatedMoviesIds={setRatedMoviesIds}
-                    loading={loading}
-                    rate={item.rate || 0}
-                    onRateChange={(newRate) =>
-                      handleRateChange(item.id, newRate)
-                    }
-                  />
-                )
-            )}
+          {ratedMoviesToDisplay.length > 0 ? (
+            ratedMoviesToDisplay.map((item) => (
+              <Card
+                item={item}
+                key={item.id}
+                id={item.id}
+                original_title={item.original_title}
+                overview={item.overview}
+                release_date={item.release_date}
+                poster_path={item.poster_path}
+                genre_ids={item.genre_ids}
+                vote_average={item.vote_average}
+                getGenreNamesByIds={getGenreNamesByIds}
+                ratedMoviesIds={ratedMoviesIds}
+                setRatedMoviesIds={setRatedMoviesIds}
+                loading={loading}
+                rate={item.rate || 0}
+                onRateChange={(newRate) => handleRateChange(item.id, newRate)}
+              />
+            ))
+          ) : (
+            <NoData />
+          )}
           {showPagination && (
             <PaginationsPages
               page={currentPage}
@@ -156,6 +151,8 @@ const App = () => {
           )}
         </main>
       );
+    } else {
+      return <NoData />;
     }
   };
 
@@ -167,16 +164,6 @@ const App = () => {
             <MuvieMenu className="menu-center" onMenuClick={onMenuClick} />
           </div>
         </header>
-        {/* <div className="input-container">
-          <Input
-            value={searchTerm}
-            onChange={inputHandler}
-            placeholder="Type to search..."
-          />
-        </div> */}
-        <div className="input-container"></div>
-        {/* {loading && <Spin />}
-        {!loading && renderContent()} */}
         {renderContent()}
       </div>
     </div>
