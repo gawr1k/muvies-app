@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "REACT_SCRIPTS_VERSION": "5.0.1"
+    }
+  }
+}
