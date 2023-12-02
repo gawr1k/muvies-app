@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+# Фильмовые материалы
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[ссылка на приложение](https://muvies-app.vercel.app/).
 
-## Available Scripts
+Добро пожаловать в Фильмовые материалы! Это веб-приложение, предоставляющее информацию о фильмах и позволяющее пользователям добавлять рейтинги к фильмам. Мы используем API от themoviedb для получения данных о фильмах.
 
-In the project directory, you can run:
+## Использование
 
-### `npm start`
+### Вкладка "Поиск"
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+На вкладке "Поиск" вы можете искать фильмы по названию. Введите ключевое слово в поле поиска и нажмите Enter или кнопку "Поиск". Результаты поиска включают информацию о фильмах, такую как название, описание, рейтинг и постеры. Подробную информацию о фильме можно увидеть, нажав на его карточку.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Вкладка "Рейтинг"
 
-### `npm test`
+На вкладке "Оцененные" отображаются фильмы, которым вы присвоили рейтинг. Здесь вы можете увидеть информацию о рейтинге, который вы добавили к каждому фильму. Есть возможность изменить рейтинг или удалить фильм из списков оцененных.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Гостевая сессия
 
-### `npm run build`
+Для использования API от themoviedb мы используем гостевую сессию с продолжительностью 36 часов. Вы можете добавлять рейтинги к фильмам в течение этого периода. После истечения 36 часов информация о рейтинге будет стерта. Гостевая сессия хранится в localStorage вашего браузера.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Пагинация
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+В приложении реализована пагинация для отображения большого количества результатов поиска или оцененных фильмов. Используйте кнопки "Предыдущий" и "Следующий" внизу списка фильмов.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Адаптивный дизайн
 
-### `npm run eject`
+Приложение разработано с учетом адаптивного дизайна, что обеспечивает корректную работу на ПК и мобильных устройствах.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Лицензия
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Лицензия MIT](LICENSE)
