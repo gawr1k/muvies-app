@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 import "./App.scss";
 import React, { useEffect, useState } from "react";
 import getGenreNamesByIds from "./components/Card/genre_id";
@@ -66,7 +64,7 @@ const App = () => {
   };
 
   const debouncedInputHandler = _.debounce((e) => {
-    var lowerCase = e.target.value.toLowerCase();
+    let lowerCase = e.target.value.toLowerCase();
     setSearchTerm(lowerCase);
     setCurrentPage(1);
   }, 500);

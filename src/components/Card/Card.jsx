@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 import "macro-css";
 import "./Card.scss";
-import React from "react";
+import React, { useContext } from "react";
 import { Rate, Spin } from "antd";
 import { postAddRating } from "../ApiClient/ApiClient";
 import { AuthContext } from "../../App.jsx";
-import { useContext } from "react";
 
 export default function Card({
   item,
