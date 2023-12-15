@@ -3,21 +3,20 @@ import { Menu } from "antd";
 const items = [
   {
     label: "Search",
-    key: '/search'
+    key: "/search",
   },
   {
     label: "Rated",
-    key: "/rated"
-  }
+    key: "/rated",
+  },
 ];
 
-const MuvieMenu = ({onMenuClick}) => {
-  
+const MuvieMenu = ({ onMenuClick }) => {
   return (
-    <Menu 
+    <Menu
       mode="horizontal"
       items={items}
-      onClick={({key}) => {
+      onClick={({ key }) => {
         onMenuClick(key);
       }}
     />

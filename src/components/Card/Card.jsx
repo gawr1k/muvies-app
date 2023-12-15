@@ -1,46 +1,25 @@
+/* eslint-disable no-unused-vars */
 import "macro-css";
 import "./Card.scss";
 import React from "react";
 import { Rate, Spin } from "antd";
+import { postAddRating } from "../ApiClient/ApiClient";
+import { AuthContext } from "../../App.jsx";
+import { useContext } from "react";
 
-const Card = ({
+export default function Card({
   item,
+  id,
   poster_path,
   getGenreNamesByIds,
-  ratedMoviesIds,
-  setRatedMoviesIds,
   vote_average,
   loading,
-}) => {
+}) {
   const PLACEHOLDER_IMAGE = "./noPhoto.jpeg";
   const BASE_URL = "https://image.tmdb.org/t/p/original";
   let imgSrc;
-
-  const handleRate = (id, newRate, item) => {
-    const isCardRated = ratedMoviesIds.some((movie) => movie.id === id);
-
-    if (isCardRated) {
-      setRatedMoviesIds((prevRatedMoviesIds) => {
-        return prevRatedMoviesIds.map((movie) =>
-          movie.id === id ? { ...movie, rate: newRate } : movie
-        );
-      });
-    } else {
-      setRatedMoviesIds((prevRatedMoviesIds) => [
-        ...prevRatedMoviesIds,
-        {
-          id,
-          original_title: item.original_title,
-          overview: item.overview,
-          release_date: item.release_date,
-          poster_path: item.poster_path,
-          genre_ids: item.genre_ids,
-          vote_average: item.vote_average,
-          rate: newRate,
-        },
-      ]);
-    }
-  };
+  // const guestSessionId = useGuestSessionId();
+  const { guestSessionId } = useContext(AuthContext);
 
   if (poster_path) {
     imgSrc = `${BASE_URL}${poster_path}`;
@@ -50,11 +29,13 @@ const Card = ({
 
   const getBorderColor = () => {
     if (vote_average < 3) {
-      return "red";
-    } else if (vote_average < 7) {
+      return "#E90000";
+    } else if (vote_average >= 3 && vote_average < 5) {
+      return "#E97E00";
+    } else if (vote_average >= 5 && vote_average < 7) {
       return "#E9D100";
     } else {
-      return "green";
+      return "#66E900";
     }
   };
 
@@ -82,7 +63,7 @@ const Card = ({
         <div className="card__description__genre d-flex">
           {getGenreNamesByIds(item?.genre_ids).map((genre, index) => {
             // что то нужно придумать
-            console.log(getGenreNamesByIds(item.genre_ids));
+            // console.log(getGenreNamesByIds(item.genre_ids));
             return <div key={index}>{genre}</div>;
           })}
         </div>
@@ -91,16 +72,13 @@ const Card = ({
           <Rate
             count={10}
             allowHalf
-            defaultValue={
-              (ratedMoviesIds.find((movie) => movie.id === item?.id) || {})
-                .rate || 0
-            }
-            onChange={(newRate) => handleRate(item?.id, newRate, item)}
+            onChange={(value) => {
+              // console.log(value);
+              postAddRating(id, value, guestSessionId);
+            }}
           />
         </div>
       </div>
     </div>
   );
-};
-
-export default Card;
+}

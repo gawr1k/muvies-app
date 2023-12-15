@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import Access_key from "../ApiClient/api-key";
 // import React from "react";
 
@@ -140,6 +141,6 @@ const getGenreNamesByIds = (genreIds) => {
 // Пример использования:
 const exampleGenreIds = [28, 12, 16];
 const genreNames = getGenreNamesByIds(exampleGenreIds);
-console.log(genreNames); // Выведет: ["Action", "Abenteuer", "Animation"]
+// console.log(genreNames); // Выведет: ["Action", "Abenteuer", "Animation"]
 
 export default getGenreNamesByIds;
