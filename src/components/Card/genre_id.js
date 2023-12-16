@@ -131,12 +131,10 @@ const genresData = {
   ],
 };
 
-const getGenreNamesByIds = (genreIds) => {
-  return genreIds.map((id) => {
+const getGenreNamesByIds = (genreIds) => genreIds.map((id) => {
     const genre = genresData.genres.find((g) => g.id === id);
     return genre ? genre.name : "Unknown";
   });
-};
 
 // Пример использования:
 const exampleGenreIds = [28, 12, 16];

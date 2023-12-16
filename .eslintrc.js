@@ -12,7 +12,6 @@ module.exports = {
         "airbnb",
         "plugin:import/recommended",
         "prettier",
-
     ],
     "overrides": [
         {

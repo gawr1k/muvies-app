@@ -1,4 +1,4 @@
-import { defToken, apiKey } from "./api-key.js";
+import { defToken, apiKey } from "./api-key";
 
 const getSearchMuvies = (search, page) => {
   const options = {
@@ -30,8 +30,7 @@ const getCreateGuestSession = () => {
 
   const result = fetch(
     "https://api.themoviedb.org/3/authentication/guest_session/new",
-    options
-  )
+    options)
     .then((response) => response.json())
     .then((response) => response.guest_session_id)
     .catch((err) => console.error(err));

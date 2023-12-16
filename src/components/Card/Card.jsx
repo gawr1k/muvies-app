@@ -1,10 +1,12 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
 import "macro-css";
 import "./Card.scss";
-import React, { useContext } from "react";
+import React from "react";
 import { Rate, Spin } from "antd";
-import { postAddRating } from "../ApiClient/ApiClient";
-import { AuthContext } from "../../App.jsx";
+import { postAddRating } from "../../ApiClient/ApiClient";
+// import { AuthContext } from "../../App";
 
 export default function Card({
   item,
@@ -13,12 +15,13 @@ export default function Card({
   getGenreNamesByIds,
   vote_average,
   loading,
+  guestSessionId,
 }) {
   const PLACEHOLDER_IMAGE = "./noPhoto.jpeg";
   const BASE_URL = "https://image.tmdb.org/t/p/original";
   let imgSrc;
   // const guestSessionId = useGuestSessionId();
-  const { guestSessionId } = useContext(AuthContext);
+  // const { guestSessionId } = useContext(AuthContext);
 
   if (poster_path) {
     imgSrc = `${BASE_URL}${poster_path}`;
@@ -29,13 +32,13 @@ export default function Card({
   const getBorderColor = () => {
     if (vote_average < 3) {
       return "#E90000";
-    } else if (vote_average >= 3 && vote_average < 5) {
+    } if (vote_average >= 3 && vote_average < 5) {
       return "#E97E00";
-    } else if (vote_average >= 5 && vote_average < 7) {
+    } if (vote_average >= 5 && vote_average < 7) {
       return "#E9D100";
-    } else {
+    } 
       return "#66E900";
-    }
+    
   };
 
   if (loading) {
@@ -60,11 +63,11 @@ export default function Card({
           {item?.release_date || "N/A"}
         </h3>
         <div className="card__description__genre d-flex">
-          {getGenreNamesByIds(item?.genre_ids).map((genre, index) => {
+          {getGenreNamesByIds(item?.genre_ids).map((genre, index) => 
             // что то нужно придумать
             // console.log(getGenreNamesByIds(item.genre_ids));
-            return <div key={index}>{genre}</div>;
-          })}
+             <div key={index}>{genre}</div>
+          )}
         </div>
         <p>{item?.overview || "N/A"}</p>
         <div className="card__description__rate">
