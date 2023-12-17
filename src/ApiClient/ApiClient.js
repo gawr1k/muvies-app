@@ -55,28 +55,13 @@ const postAddRating = async (id, rate, guestSessionId) => {
     );
 
     const data = await response.json();
-    // console.log(data);
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-
-// const getRateFilm = async (guestSessionId) => {
-//   // console.log("guestSessionId:", guestSessionId);
-//   const res = await fetch(
-//     `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}`
-//   );
-
-//   if (!res.ok) {
-//     throw new Error("Could not fetch.");
-//   }
-
-//   const rated = await res.json();
-//   console.log(rated);
-//   return rated;
-// };
 
 const getRateFilm = async (guestSessionId, page) => {
   const res = await fetch(
@@ -92,6 +77,30 @@ const getRateFilm = async (guestSessionId, page) => {
   return rated;
 };
 
+async function gethMovieGenres() {
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: defToken,
+    },
+  };
+
+  try {
+    const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options);
+    const data = await response.json();
+    // console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export {
-  getSearchMuvies, postAddRating, getCreateGuestSession, getRateFilm,
+  getSearchMuvies,
+  postAddRating,
+  getCreateGuestSession,
+  getRateFilm,
+  gethMovieGenres,
 };

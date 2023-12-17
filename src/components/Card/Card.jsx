@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import 'macro-css';
 import './Card.scss';
 import PropTypes from 'prop-types';
@@ -5,6 +6,7 @@ import React from 'react';
 import { Rate } from 'antd';
 import { postAddRating } from '../../ApiClient/ApiClient';
 import DataContext from '../../context/DataContext';
+import UIContext from '../../context/UIContext';
 
 export default function Card({
   item = {},
@@ -12,6 +14,7 @@ export default function Card({
   posterPath = '',
 }) {
   const { guestSessionId } = React.useContext(DataContext);
+  const { genresList } = React.useContext(UIContext);
   const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
   const BASE_URL = 'https://image.tmdb.org/t/p/original';
   const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE;
@@ -27,9 +30,15 @@ export default function Card({
     return '#66E900';
   };
 
+  const getGenresByIds = (genreIds, externalGenresList) => {
+    const selectedGenres = externalGenresList.genres.filter((genre) => genreIds.includes(genre.id));
+    return selectedGenres.map((genre) => genre.name);
+  };
+
   const {
     original_title: title,
     release_date: releaseDate,
+    genre_ids: genreIds,
     overview,
     id,
   } = item;
@@ -52,6 +61,12 @@ export default function Card({
         <h3 className="card__description__release__date">
           {releaseDate || 'N/A'}
         </h3>
+        <div className="card__description__genre d-flex">
+          {getGenresByIds(genreIds, genresList).map((genre, index) => (
+            <div key={`${genre}-${index}`}>{genre}</div>
+          ))}
+
+        </div>
         <p>{overview || 'N/A'}</p>
         <div className="card__description__rate">
           <Rate

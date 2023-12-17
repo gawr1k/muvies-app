@@ -7,7 +7,9 @@ import MenuStateContext from './context/MenuStateContext';
 import DataContext from './context/DataContext';
 import UIContext from './context/UIContext';
 import CardList from './components/CardList/CardList';
-import { getSearchMuvies, getCreateGuestSession, getRateFilm } from './ApiClient/ApiClient';
+import {
+  getSearchMuvies, getCreateGuestSession, getRateFilm, gethMovieGenres,
+} from './ApiClient/ApiClient';
 
 export default function App() {
   const [menustate, setMenuState] = React.useState('/search');
@@ -24,9 +26,10 @@ export default function App() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [currentPage, setCurrentPage] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
+  const [genresList, setGenresList] = React.useState('');
   const uiContextValue = React.useMemo(() => ({
-    loading, currentPage, setCurrentPage, setSearchTerm,
-  }), [loading, currentPage, setCurrentPage, setSearchTerm]);
+    loading, genresList, currentPage, setCurrentPage, setSearchTerm,
+  }), [loading, genresList, currentPage, setCurrentPage, setSearchTerm]);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +65,21 @@ export default function App() {
       });
     }
   }, [guestSessionId]);
+
+  React.useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const genresData = await gethMovieGenres();
+        setGenresList(genresData);
+        console.log(123);
+        console.log(genresData);
+      } catch (error) {
+        console.error('Error fetching genres:', error);
+      }
+    };
+
+    fetchGenres();
+  }, []);
 
   const debouncedInputHandler = _.debounce((e) => {
     const lowerCase = e.target.value.toLowerCase();
