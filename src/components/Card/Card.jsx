@@ -1,42 +1,39 @@
 import 'macro-css';
 import './Card.scss';
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Rate, Spin } from 'antd';
+import { Rate } from 'antd';
 import { postAddRating } from '../../ApiClient/ApiClient';
+import DataContext from '../../context/DataContext';
 
 export default function Card({
-  item,
-  id,
-  poster_path,
-  getGenreNamesByIds,
-  vote_average,
-  loading,
-  guestSessionId,
+  item = {},
+  voteAverage = 0,
+  posterPath = '',
 }) {
+  const { guestSessionId } = React.useContext(DataContext);
   const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
   const BASE_URL = 'https://image.tmdb.org/t/p/original';
-  let imgSrc;
-
-  if (poster_path) {
-    imgSrc = `${BASE_URL}${poster_path}`;
-  } else {
-    imgSrc = PLACEHOLDER_IMAGE;
-  }
+  const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE;
 
   const getBorderColor = () => {
-    if (vote_average < 3) {
+    if (voteAverage < 3) {
       return '#E90000';
-    } if (vote_average >= 3 && vote_average < 5) {
+    } if (voteAverage >= 3 && voteAverage < 5) {
       return '#E97E00';
-    } if (vote_average >= 5 && vote_average < 7) {
+    } if (voteAverage >= 5 && voteAverage < 7) {
       return '#E9D100';
     }
     return '#66E900';
   };
 
-  if (loading) {
-    return <Spin />;
-  }
+  const {
+    original_title: title,
+    release_date: releaseDate,
+    overview,
+    id,
+  } = item;
+
   return (
     <div className="card">
       <div className="card__img">
@@ -44,30 +41,23 @@ export default function Card({
       </div>
       <div className="card__description ">
         <h1 className="card__description__title">
-          {item?.original_title || 'N/A'}
+          {title || 'N/A'}
         </h1>
         <div
           className="card__description__rating"
           style={{ borderColor: getBorderColor() }}
         >
-          {item?.vote_average ? item.vote_average.toFixed(1) : 'N/A'}
+          {voteAverage ? voteAverage.toFixed(1) : 'N/A'}
         </div>
         <h3 className="card__description__release__date">
-          {item?.release_date || 'N/A'}
+          {releaseDate || 'N/A'}
         </h3>
-        <div className="card__description__genre d-flex">
-          {getGenreNamesByIds(item?.genre_ids).map((genre, index) =>
-          // что то нужно придумать
-          // console.log(getGenreNamesByIds(item.genre_ids));
-            <div key={index}>{genre}</div>)}
-        </div>
-        <p>{item?.overview || 'N/A'}</p>
+        <p>{overview || 'N/A'}</p>
         <div className="card__description__rate">
           <Rate
             count={10}
             allowHalf
             onChange={(value) => {
-              // console.log(value);
               postAddRating(id, value, guestSessionId);
             }}
           />
@@ -76,3 +66,20 @@ export default function Card({
     </div>
   );
 }
+
+Card.propTypes = {
+  item: PropTypes.shape({
+    original_title: PropTypes.string,
+    release_date: PropTypes.string,
+    overview: PropTypes.string,
+    id: PropTypes.number,
+  }),
+  voteAverage: PropTypes.number,
+  posterPath: PropTypes.string,
+};
+
+Card.defaultProps = {
+  item: {},
+  voteAverage: 0,
+  posterPath: '',
+};

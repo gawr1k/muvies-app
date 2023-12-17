@@ -1,24 +1,15 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import './CardList.scss';
 import { Spin } from 'antd';
 import Card from '../Card/Card';
 import NoData from '../NoData/NoData';
 import PaginationsPages from '../PaginationsPages/PaginationsPages';
-import getGenreNamesByIds from '../Card/genre_id';
 import DataContext from '../../context/DataContext';
 import UIContext from '../../context/UIContext';
 
 export default function CardList() {
-  const {
-    muviesRenderList, ratedMoviesIds, setRatedMoviesIds, guestSessionId,
-  } = React.useContext(DataContext);
-  const {
-    loading, currentPage, setCurrentPage, setSearchTerm,
-  } = React.useContext(UIContext);
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const { muviesRenderList } = React.useContext(DataContext);
+  const { loading } = React.useContext(UIContext);
 
   return (
     <div>
@@ -34,18 +25,9 @@ export default function CardList() {
             muviesRenderList.results.map((item) => (
               <Card
                 key={item.id}
-                id={item.id}
-                original_title={item.original_title}
-                overview={item.overview}
-                release_date={item.release_date}
-                poster_path={item.poster_path}
-                genre_ids={item.genre_ids}
-                vote_average={item.vote_average}
-                getGenreNamesByIds={getGenreNamesByIds}
-                ratedMoviesIds={ratedMoviesIds}
-                setRatedMoviesIds={setRatedMoviesIds}
+                posterPath={item.poster_path}
+                voteAverage={item.vote_average}
                 item={item}
-                guestSessionId={guestSessionId}
               />
             ))
           ) : (
@@ -55,11 +37,7 @@ export default function CardList() {
       )}
       {muviesRenderList.total_pages > 1 && (
         <footer>
-          <PaginationsPages
-            page={currentPage}
-            handlePageChange={handlePageChange}
-            total={muviesRenderList.total_pages}
-          />
+          <PaginationsPages />
         </footer>
       )}
     </div>

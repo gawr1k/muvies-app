@@ -7,11 +7,7 @@ import MenuStateContext from './context/MenuStateContext';
 import DataContext from './context/DataContext';
 import UIContext from './context/UIContext';
 import CardList from './components/CardList/CardList';
-import {
-  getSearchMuvies,
-  getCreateGuestSession,
-  getRateFilm,
-} from './ApiClient/ApiClient';
+import { getSearchMuvies, getCreateGuestSession, getRateFilm } from './ApiClient/ApiClient';
 
 export default function App() {
   const [menustate, setMenuState] = React.useState('/search');
@@ -59,14 +55,10 @@ export default function App() {
     const savedSessionId = localStorage.getItem('guestSessionId');
     if (savedSessionId) {
       setGuestSessionId(savedSessionId);
-      // console.log(guestSessionId);
-      // console.log(2.1)
     } else {
       getCreateGuestSession().then((newSessionId) => {
         localStorage.setItem('guestSessionId', newSessionId);
         setGuestSessionId(newSessionId);
-        // console.log(guestSessionId);
-        // console.log(2.2)
       });
     }
   }, [guestSessionId]);
@@ -77,9 +69,9 @@ export default function App() {
     setCurrentPage(1);
   }, 500);
 
-  const inputHandler = (e) => {
+  const inputHandler = React.useCallback((e) => {
     debouncedInputHandler(e);
-  };
+  }, [debouncedInputHandler]);
 
   return (
     <div className="container">

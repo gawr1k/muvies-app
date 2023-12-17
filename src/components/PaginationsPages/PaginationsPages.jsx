@@ -1,16 +1,23 @@
-/* eslint-disable react/prop-types */
 import './PaginationPages.scss';
 import React from 'react';
 import { Pagination } from 'antd';
+import UIContext from '../../context/UIContext';
+import DataContext from '../../context/DataContext';
 
-function PaginationsPages({ page, handlePageChange, total }) {
+function PaginationsPages() {
+  const { currentPage, setCurrentPage } = React.useContext(UIContext);
+  const { muviesRenderList } = React.useContext(DataContext);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     <Pagination
       defaultPageSize={1}
       defaultCurrent={1}
-      current={page}
+      current={currentPage}
       onChange={handlePageChange}
-      total={total}
+      total={muviesRenderList.total_pages}
     />
   );
 }
