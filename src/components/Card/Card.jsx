@@ -1,12 +1,8 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/prop-types */
-/* eslint-disable camelcase */
-import "macro-css";
-import "./Card.scss";
-import React from "react";
-import { Rate, Spin } from "antd";
-import { postAddRating } from "../../ApiClient/ApiClient";
-// import { AuthContext } from "../../App";
+import 'macro-css';
+import './Card.scss';
+import React from 'react';
+import { Rate, Spin } from 'antd';
+import { postAddRating } from '../../ApiClient/ApiClient';
 
 export default function Card({
   item,
@@ -17,11 +13,9 @@ export default function Card({
   loading,
   guestSessionId,
 }) {
-  const PLACEHOLDER_IMAGE = "./noPhoto.jpeg";
-  const BASE_URL = "https://image.tmdb.org/t/p/original";
+  const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
+  const BASE_URL = 'https://image.tmdb.org/t/p/original';
   let imgSrc;
-  // const guestSessionId = useGuestSessionId();
-  // const { guestSessionId } = useContext(AuthContext);
 
   if (poster_path) {
     imgSrc = `${BASE_URL}${poster_path}`;
@@ -31,14 +25,13 @@ export default function Card({
 
   const getBorderColor = () => {
     if (vote_average < 3) {
-      return "#E90000";
+      return '#E90000';
     } if (vote_average >= 3 && vote_average < 5) {
-      return "#E97E00";
+      return '#E97E00';
     } if (vote_average >= 5 && vote_average < 7) {
-      return "#E9D100";
-    } 
-      return "#66E900";
-    
+      return '#E9D100';
+    }
+    return '#66E900';
   };
 
   if (loading) {
@@ -51,25 +44,24 @@ export default function Card({
       </div>
       <div className="card__description ">
         <h1 className="card__description__title">
-          {item?.original_title || "N/A"}
+          {item?.original_title || 'N/A'}
         </h1>
         <div
           className="card__description__rating"
           style={{ borderColor: getBorderColor() }}
         >
-          {item?.vote_average ? item.vote_average.toFixed(1) : "N/A"}
+          {item?.vote_average ? item.vote_average.toFixed(1) : 'N/A'}
         </div>
         <h3 className="card__description__release__date">
-          {item?.release_date || "N/A"}
+          {item?.release_date || 'N/A'}
         </h3>
         <div className="card__description__genre d-flex">
-          {getGenreNamesByIds(item?.genre_ids).map((genre, index) => 
-            // что то нужно придумать
-            // console.log(getGenreNamesByIds(item.genre_ids));
-             <div key={index}>{genre}</div>
-          )}
+          {getGenreNamesByIds(item?.genre_ids).map((genre, index) =>
+          // что то нужно придумать
+          // console.log(getGenreNamesByIds(item.genre_ids));
+            <div key={index}>{genre}</div>)}
         </div>
-        <p>{item?.overview || "N/A"}</p>
+        <p>{item?.overview || 'N/A'}</p>
         <div className="card__description__rate">
           <Rate
             count={10}
