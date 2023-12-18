@@ -1,4 +1,5 @@
-/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import 'macro-css';
 import './Card.scss';
 import PropTypes from 'prop-types';
@@ -9,12 +10,12 @@ import DataContext from '../../context/DataContext';
 import UIContext from '../../context/UIContext';
 
 export default function Card({
-  item = {},
-  voteAverage = 0,
-  posterPath = '',
+  item,
+  voteAverage,
+  posterPath,
 }) {
   const { guestSessionId } = React.useContext(DataContext);
-  const { genresList } = React.useContext(UIContext);
+  const { genresList, ratedMovies } = React.useContext(UIContext);
   const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
   const BASE_URL = 'https://image.tmdb.org/t/p/original';
   const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE;
@@ -32,7 +33,7 @@ export default function Card({
 
   const getGenresByIds = (genreIds, externalGenresList) => {
     const selectedGenres = externalGenresList.genres.filter((genre) => genreIds.includes(genre.id));
-    return selectedGenres.map((genre) => genre.name);
+    return selectedGenres.map((genre) => <div key={genre.id}>{genre.name}</div>);
   };
 
   const {
@@ -62,14 +63,12 @@ export default function Card({
           {releaseDate || 'N/A'}
         </h3>
         <div className="card__description__genre d-flex">
-          {getGenresByIds(genreIds, genresList).map((genre, index) => (
-            <div key={`${genre}-${index}`}>{genre}</div>
-          ))}
-
+          {getGenresByIds(genreIds, genresList)}
         </div>
         <p>{overview || 'N/A'}</p>
         <div className="card__description__rate">
           <Rate
+            defaultValue={ratedMovies[item.id] || 0}
             count={10}
             allowHalf
             onChange={(value) => {
@@ -88,6 +87,8 @@ Card.propTypes = {
     release_date: PropTypes.string,
     overview: PropTypes.string,
     id: PropTypes.number,
+    rating: PropTypes.number,
+    genre_ids: PropTypes.arrayOf(PropTypes.number),
   }),
   voteAverage: PropTypes.number,
   posterPath: PropTypes.string,

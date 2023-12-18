@@ -10,7 +10,6 @@ import UIContext from '../../context/UIContext';
 export default function CardList() {
   const { muviesRenderList } = React.useContext(DataContext);
   const { loading } = React.useContext(UIContext);
-
   return (
     <div>
       {loading ? (

@@ -1,6 +1,6 @@
 import { defToken, apiKey } from './api-key';
 
-const getSearchMuvies = (search, page) => {
+function getSearchMuvies(search, page) {
   const options = {
     method: 'GET',
     headers: {
@@ -17,7 +17,7 @@ const getSearchMuvies = (search, page) => {
     .then((response) => response)
     .catch((err) => console.error(err));
   return result;
-};
+}
 
 const getCreateGuestSession = () => {
   const options = {
@@ -55,7 +55,7 @@ const postAddRating = async (id, rate, guestSessionId) => {
     );
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -73,7 +73,7 @@ const getRateFilm = async (guestSessionId, page) => {
   }
 
   const rated = await res.json();
-  console.log(rated);
+  // console.log(rated);
   return rated;
 };
 

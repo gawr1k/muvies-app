@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import './App.scss';
 import { Input } from 'antd';
@@ -15,21 +16,26 @@ export default function App() {
   const [menustate, setMenuState] = React.useState('/search');
   const menuContextValue = React.useMemo(() => ({ menustate, setMenuState }), [
     menustate, setMenuState]);
-  const [data, setData] = React.useState([]);
-  const [ratedMoviesIds, setRatedMoviesIds] = React.useState([]);
   const [muviesRenderList, setMuviesRenderList] = React.useState([]);
   const [guestSessionId, setGuestSessionId] = React.useState([]);
   const dataContextValue = React.useMemo(() => ({
-    data, muviesRenderList, setMuviesRenderList, ratedMoviesIds, setRatedMoviesIds, guestSessionId,
-  }), [data,
-    muviesRenderList, setMuviesRenderList, ratedMoviesIds, setRatedMoviesIds, guestSessionId]);
+    muviesRenderList,
+    setMuviesRenderList,
+    guestSessionId,
+  }), [
+    muviesRenderList, setMuviesRenderList, guestSessionId]);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [ratedMovies, setRatedMovies] = React.useState({});
   const [currentPage, setCurrentPage] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [genresList, setGenresList] = React.useState('');
   const uiContextValue = React.useMemo(() => ({
-    loading, genresList, currentPage, setCurrentPage, setSearchTerm,
-  }), [loading, genresList, currentPage, setCurrentPage, setSearchTerm]);
+    loading, genresList, currentPage, ratedMovies, setCurrentPage, setSearchTerm, setRatedMovies,
+  }), [loading,
+    genresList,
+    currentPage,
+    setCurrentPage,
+    setSearchTerm]);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -37,12 +43,23 @@ export default function App() {
       try {
         if (menustate === '/search') {
           const res = await getSearchMuvies(searchTerm, currentPage);
-          setData(res);
           setMuviesRenderList(res);
-        } else if (menustate === '/rated' && guestSessionId) {
-          const ratedMovies = await getRateFilm(guestSessionId, currentPage);
-          setRatedMoviesIds(ratedMovies);
-          setMuviesRenderList(ratedMovies);
+          const response = await getRateFilm(guestSessionId, currentPage);
+          const movies = response.results.reduce((acc, movie) => {
+            acc[movie.id] = movie.rating;
+            return acc;
+          }, {});
+          setRatedMovies(movies);
+          console.log(ratedMovies);
+        } else if (menustate === '/rated') {
+          const ratedMovie = await getRateFilm(guestSessionId, currentPage);
+          setMuviesRenderList(ratedMovie);
+          const movies = ratedMovie.results.reduce((acc, movie) => {
+            acc[movie.id] = movie.rating;
+            return acc;
+          }, {});
+          setRatedMovies(movies);
+          console.log(ratedMovies);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -50,9 +67,24 @@ export default function App() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [searchTerm, currentPage, menustate, guestSessionId]);
+
+  // React.useEffect(() => {
+  //   async function fetchData() {
+  //     const response = await getRateFilm(guestSessionId, currentPage);
+
+  //     const movies = response.results.reduce((acc, movie) => {
+  //       acc[movie.id] = movie.rating;
+  //       return acc;
+  //     }, {});
+
+  //     setRatedMovies(movies);
+  //     // console.log(ratedMovies);
+  //   }
+
+  //   fetchData();
+  // }, [searchTerm, currentPage, menustate, guestSessionId]);
 
   React.useEffect(() => {
     const savedSessionId = localStorage.getItem('guestSessionId');
@@ -71,13 +103,10 @@ export default function App() {
       try {
         const genresData = await gethMovieGenres();
         setGenresList(genresData);
-        console.log(123);
-        console.log(genresData);
       } catch (error) {
         console.error('Error fetching genres:', error);
       }
     };
-
     fetchGenres();
   }, []);
 
