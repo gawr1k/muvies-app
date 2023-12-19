@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Menu } from 'antd';
 import React from 'react';
 import MenuStateContext from '../../context/MenuStateContext';

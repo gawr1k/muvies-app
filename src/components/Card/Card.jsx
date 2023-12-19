@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import 'macro-css';
 import './Card.scss';
 import PropTypes from 'prop-types';
@@ -36,6 +34,9 @@ export default function Card({
     return selectedGenres.map((genre) => <div key={genre.id}>{genre.name}</div>);
   };
 
+  const currentRating = ratedMovies.find((movie) => movie.id === item.id);
+  const ratingValue = currentRating ? currentRating.rating : 0;
+
   const {
     original_title: title,
     release_date: releaseDate,
@@ -68,7 +69,7 @@ export default function Card({
         <p>{overview || 'N/A'}</p>
         <div className="card__description__rate">
           <Rate
-            defaultValue={ratedMovies[item.id] || 0}
+            defaultValue={ratingValue}
             count={10}
             allowHalf
             onChange={(value) => {
