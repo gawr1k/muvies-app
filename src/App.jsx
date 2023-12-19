@@ -23,7 +23,7 @@ export default function App() {
     guestSessionId,
   }), [
     muviesRenderList, guestSessionId]);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('open');
   const [ratedMovies, setRatedMovies] = React.useState({});
   const [currentPage, setCurrentPage] = React.useState(1);
   const [loading, setLoading] = React.useState(true);

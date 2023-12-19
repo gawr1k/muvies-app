@@ -1,6 +1,6 @@
 import { defToken, apiKey } from './api-key';
 
-function getSearchMuvies(search, page) {
+async function getSearchMuvies(search, page) {
   const options = {
     method: 'GET',
     headers: {
@@ -9,17 +9,25 @@ function getSearchMuvies(search, page) {
     },
   };
 
-  const result = fetch(
-    `https://api.themoviedb.org/3/search/movie?query=${search}&page=${page}`,
-    options,
-  )
-    .then((response) => response.json())
-    .then((response) => response)
-    .catch((err) => console.error(err));
-  return result;
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?query=${search}&page=${page}`,
+      options,
+    );
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error in getSearchMovies:', error.message);
+    throw error;
+  }
 }
 
-const getCreateGuestSession = () => {
+const getCreateGuestSession = async () => {
   const options = {
     method: 'GET',
     headers: {
@@ -28,14 +36,22 @@ const getCreateGuestSession = () => {
     },
   };
 
-  const result = fetch(
-    'https://api.themoviedb.org/3/authentication/guest_session/new',
-    options,
-  )
-    .then((response) => response.json())
-    .then((response) => response.guest_session_id)
-    .catch((err) => console.error(err));
-  return result;
+  try {
+    const response = await fetch(
+      'https://api.themoviedb.org/3/authentication/guest_session/new',
+      options,
+    );
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.guest_session_id;
+  } catch (error) {
+    console.error('Error in getCreateGuestSession:', error.message);
+    throw error;
+  }
 };
 
 const postAddRating = async (id, rate, guestSessionId) => {
@@ -47,28 +63,41 @@ const postAddRating = async (id, rate, guestSessionId) => {
     },
     body: JSON.stringify({ value: rate }),
   };
+
   try {
     const response = await fetch(
       `https://api.themoviedb.org/3/movie/${id}/rating?api_key=${apiKey}&guest_session_id=${guestSessionId}`,
       options,
     );
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
+    console.error('Error in postAddRating:', error.message);
     throw error;
   }
 };
 
 const getRateFilm = async (guestSessionId, page) => {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`,
-  );
-  if (!res.ok) {
-    throw new Error('Could not fetch.');
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`,
+    );
+
+    if (!res.ok) {
+      throw new Error(`Request failed with status: ${res.status}`);
+    }
+
+    const rated = await res.json();
+    return rated;
+  } catch (error) {
+    console.error('Error in getRateFilm:', error.message);
+    throw error;
   }
-  const rated = await res.json();
-  return rated;
 };
 
 const getRatingMovies = async (guestSessionId, page) => {
@@ -76,9 +105,11 @@ const getRatingMovies = async (guestSessionId, page) => {
     const res = await fetch(
       `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`,
     );
+
     if (!res.ok) {
-      throw new Error('Could not fetch.');
+      throw new Error(`Request failed with status: ${res.status}`);
     }
+
     const rated = await res.json();
     const totalPages = rated.total_pages;
     const fetchPromises = [];
@@ -86,7 +117,12 @@ const getRatingMovies = async (guestSessionId, page) => {
     for (let currentPage = 1; currentPage <= totalPages; currentPage += 1) {
       const fetchPromise = fetch(
         `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${currentPage}&sort_by=created_at.asc`,
-      ).then((response) => response.json());
+      ).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+        return response.json();
+      });
 
       fetchPromises.push(fetchPromise);
     }
@@ -115,13 +151,19 @@ async function gethMovieGenres() {
       Authorization: defToken,
     },
   };
+
   try {
     const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options);
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
+
     const data = await response.json();
     // console.log(data);
     return data;
   } catch (error) {
-    console.error(error);
+    console.error('Error in getMovieGenres:', error.message);
     throw error;
   }
 }
