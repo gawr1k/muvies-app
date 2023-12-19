@@ -3,6 +3,7 @@ import './App.scss';
 import { Input } from 'antd';
 import _ from 'lodash';
 import MuvieMenu from './components/Menu/Menu';
+import AlertAlarm from './components/AlertAlarm/AlertAlarm';
 import MenuStateContext from './context/MenuStateContext';
 import DataContext from './context/DataContext';
 import UIContext from './context/UIContext';
@@ -28,9 +29,18 @@ export default function App() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [genresList, setGenresList] = React.useState('');
+  const [errorState, setError] = React.useState(null);
   const uiContextValue = React.useMemo(() => ({
-    loading, genresList, currentPage, ratedMovies, setCurrentPage, setSearchTerm, setRatedMovies,
-  }), [loading, genresList, currentPage, ratedMovies]);
+    loading,
+    genresList,
+    currentPage,
+    ratedMovies,
+    errorState,
+    setError,
+    setCurrentPage,
+    setSearchTerm,
+    setRatedMovies,
+  }), [loading, errorState, genresList, currentPage, ratedMovies]);
 
   React.useEffect(() => {
     const savedSessionId = localStorage.getItem('guestSessionId');
@@ -38,10 +48,14 @@ export default function App() {
       setGuestSessionId(savedSessionId);
       setMenuState('/search');
     } else {
-      getCreateGuestSession().then((newSessionId) => {
-        localStorage.setItem('guestSessionId', newSessionId);
-        setGuestSessionId(newSessionId);
-      });
+      getCreateGuestSession()
+        .then((newSessionId) => {
+          localStorage.setItem('guestSessionId', newSessionId);
+          setGuestSessionId(newSessionId);
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
     }
   }, []);
 
@@ -61,7 +75,7 @@ export default function App() {
           setMuviesRenderList(ratedMovie);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -75,7 +89,7 @@ export default function App() {
         const genresData = await gethMovieGenres();
         setGenresList(genresData);
       } catch (error) {
-        console.error('Error fetching genres:', error);
+        setError(error.message);
       }
     };
     fetchGenres();
@@ -97,6 +111,7 @@ export default function App() {
         <UIContext.Provider value={uiContextValue}>
           <DataContext.Provider value={dataContextValue}>
             <MenuStateContext.Provider value={menuContextValue}>
+              {errorState && <AlertAlarm />}
               <header>
                 <div className="menu-center">
                   <MuvieMenu className="menu-center" />

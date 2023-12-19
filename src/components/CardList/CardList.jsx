@@ -36,7 +36,7 @@ export default function CardList() {
       )}
       {muviesRenderList.total_pages > 1 && (
         <footer>
-          <PaginationsPages />
+          {!loading && <PaginationsPages />}
         </footer>
       )}
     </div>

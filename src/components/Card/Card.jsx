@@ -1,4 +1,5 @@
 import 'macro-css';
+import _ from 'lodash';
 import './Card.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -13,7 +14,8 @@ export default function Card({
   posterPath,
 }) {
   const { guestSessionId } = React.useContext(DataContext);
-  const { genresList, ratedMovies } = React.useContext(UIContext);
+  const [isSubmitting, setSubmitting] = React.useState(false);
+  const { genresList, ratedMovies, setError } = React.useContext(UIContext);
   const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
   const BASE_URL = 'https://image.tmdb.org/t/p/original';
   const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE;
@@ -36,6 +38,23 @@ export default function Card({
 
   const currentRating = ratedMovies.find((movie) => movie.id === item.id);
   const ratingValue = currentRating ? currentRating.rating : 0;
+
+  const debouncedPostAddRating = _.debounce(async (id, value, sessionId) => {
+    if (value === 0) {
+      return;
+    }
+    if (isSubmitting) {
+      return;
+    }
+    try {
+      setSubmitting(true);
+      await postAddRating(id, value, sessionId);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }, 500);
 
   const {
     original_title: title,
@@ -73,7 +92,7 @@ export default function Card({
             count={10}
             allowHalf
             onChange={(value) => {
-              postAddRating(id, value, guestSessionId);
+              debouncedPostAddRating(id, value, guestSessionId);
             }}
           />
         </div>
