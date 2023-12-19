@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import './App.scss';
-import { Input } from 'antd';
+import { Input, Alert } from 'antd';
 import _ from 'lodash';
 import MuvieMenu from './components/Menu/Menu';
 import AlertAlarm from './components/AlertAlarm/AlertAlarm';
@@ -30,6 +31,8 @@ export default function App() {
   const [loading, setLoading] = React.useState(true);
   const [genresList, setGenresList] = React.useState('');
   const [errorState, setError] = React.useState(null);
+  const [isOnline, setIsOnline] = React.useState(navigator.onLine);
+  const [errorMessage, setErrorMessage] = React.useState('');
   const uiContextValue = React.useMemo(() => ({
     loading,
     genresList,
@@ -41,6 +44,26 @@ export default function App() {
     setSearchTerm,
     setRatedMovies,
   }), [loading, errorState, genresList, currentPage, ratedMovies]);
+
+  React.useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      setErrorMessage('');
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+      setErrorMessage('No internet connection. Please check your network settings.');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   React.useEffect(() => {
     const savedSessionId = localStorage.getItem('guestSessionId');
@@ -111,21 +134,27 @@ export default function App() {
         <UIContext.Provider value={uiContextValue}>
           <DataContext.Provider value={dataContextValue}>
             <MenuStateContext.Provider value={menuContextValue}>
-              {errorState && <AlertAlarm />}
-              <header>
-                <div className="menu-center">
-                  <MuvieMenu className="menu-center" />
-                </div>
-              </header>
-              {menustate === '/search' && (
-                <div className="input-container">
-                  <Input
-                    onChange={inputHandler}
-                    placeholder="Type to search..."
-                  />
-                </div>
+              {isOnline ? (
+                <>
+                  {errorState && <AlertAlarm />}
+                  <header>
+                    <div className="menu-center">
+                      <MuvieMenu className="menu-center" />
+                    </div>
+                  </header>
+                  {menustate === '/search' && (
+                    <div className="input-container">
+                      <Input
+                        onChange={inputHandler}
+                        placeholder="Type to search..."
+                      />
+                    </div>
+                  )}
+                  <CardList />
+                </>
+              ) : (
+                <Alert className="custom-alert" message={errorMessage} type="error" showIcon />
               )}
-              <CardList />
             </MenuStateContext.Provider>
           </DataContext.Provider>
         </UIContext.Provider>
