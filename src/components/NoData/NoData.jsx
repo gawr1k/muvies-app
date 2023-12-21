@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 function NoData() {
-  return <h1>No Data</h1>;
+  return <h1>No Data</h1>
 }
 
-export default NoData;
+export default NoData

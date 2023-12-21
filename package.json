@@ -1,72 +1,76 @@
 {
-  "name": "muvies-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "antd": "^5.11.1",
-    "axios": "^1.6.2",
-    "lodash": "^4.17.21",
-    "macro-css": "^1.0.5",
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "sass": "^1.35.2",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.js",
-    "lint:fix": "eslint --fix src/**/*.js",
-    "format": "prettier --write src/**/*.js",
-    "lint-staged": "lint-staged"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "muvies-app",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@testing-library/jest-dom": "^5.17.0",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "antd": "^5.11.1",
+        "axios": "^1.6.2",
+        "lodash": "^4.17.21",
+        "macro-css": "^1.0.5",
+        "prop-types": "^15.8.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-scripts": "^5.0.1",
+        "sass": "^1.35.2",
+        "web-vitals": "^2.1.4"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "lint": "eslint \"src/**/*.{js,jsx}\"",
+        "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
+        "format": "prettier --write src/**/*.js",
+        "lint-staged": "lint-staged",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "*.ts": "npx tsc --noEmit",
+        "*.{js,jsx,ts,tsx}": "npx eslint",
+        "*.{js,jsx,ts,tsx,html,css}": "npx prettier --check"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/eslint-parser": "^7.23.3",
+        "@babel/preset-env": "^7.23.6",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^8.56.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-react-app": "^7.0.1",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-jsx-a11y": "^6.8.0",
+        "eslint-plugin-prettier": "^5.1.1",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "husky": "^8.0.0",
+        "lint-staged": "^15.2.0",
+        "prettier": "3.1.1"
     }
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "3.1.1"
-  }
 }

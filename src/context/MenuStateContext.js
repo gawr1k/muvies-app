@@ -1,5 +1,5 @@
-import { createContext } from 'react';
+import { createContext } from 'react'
 
-const MenuStateContext = createContext(null);
+const MenuStateContext = createContext(null)
 
-export default MenuStateContext;
+export default MenuStateContext

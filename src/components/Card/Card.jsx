@@ -1,60 +1,62 @@
-import 'macro-css';
-import _ from 'lodash';
-import './Card.scss';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Rate } from 'antd';
-import { postAddRating } from '../../ApiClient/ApiClient';
-import DataContext from '../../context/DataContext';
-import UIContext from '../../context/UIContext';
+import 'macro-css'
+import _ from 'lodash'
+import './Card.scss'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Rate } from 'antd'
 
-export default function Card({
-  item,
-  voteAverage,
-  posterPath,
-}) {
-  const { guestSessionId } = React.useContext(DataContext);
-  const [isSubmitting, setSubmitting] = React.useState(false);
-  const { genresList, ratedMovies, setError } = React.useContext(UIContext);
-  const PLACEHOLDER_IMAGE = './noPhoto.jpeg';
-  const BASE_URL = 'https://image.tmdb.org/t/p/original';
-  const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE;
+import { postAddRating } from '../../ApiClient/ApiClient'
+import DataContext from '../../context/DataContext'
+import UIContext from '../../context/UIContext'
+
+export default function Card({ item, voteAverage, posterPath }) {
+  const { guestSessionId } = React.useContext(DataContext)
+  const [isSubmitting, setSubmitting] = React.useState(false)
+  const { genresList, ratedMovies, setError } = React.useContext(UIContext)
+  const PLACEHOLDER_IMAGE = './assets/img/noPhoto.jpeg'
+  const BASE_URL = 'https://image.tmdb.org/t/p/original'
+  const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE
 
   const getBorderColor = () => {
     if (voteAverage < 3) {
-      return '#E90000';
-    } if (voteAverage >= 3 && voteAverage < 5) {
-      return '#E97E00';
-    } if (voteAverage >= 5 && voteAverage < 7) {
-      return '#E9D100';
+      return '#E90000'
     }
-    return '#66E900';
-  };
+    if (voteAverage >= 3 && voteAverage < 5) {
+      return '#E97E00'
+    }
+    if (voteAverage >= 5 && voteAverage < 7) {
+      return '#E9D100'
+    }
+    return '#66E900'
+  }
 
   const getGenresByIds = (genreIds, externalGenresList) => {
-    const selectedGenres = externalGenresList.genres.filter((genre) => genreIds.includes(genre.id));
-    return selectedGenres.map((genre) => <div key={genre.id}>{genre.name}</div>);
-  };
+    const selectedGenres = externalGenresList.genres.filter((genre) => {
+      const isIncluded = genreIds.includes(genre.id)
+      return isIncluded
+    })
+    return selectedGenres.map((genre) => <div key={genre.id}>{genre.name}</div>)
+  }
 
-  const currentRating = ratedMovies.find((movie) => movie.id === item.id);
-  const ratingValue = currentRating ? currentRating.rating : 0;
+  const currentRating = ratedMovies.find((movie) => movie.id === item.id)
+  const ratingValue = currentRating ? currentRating.rating : 0
 
   const debouncedPostAddRating = _.debounce(async (id, value, sessionId) => {
     if (value === 0) {
-      return;
+      return
     }
     if (isSubmitting) {
-      return;
+      return
     }
     try {
-      setSubmitting(true);
-      await postAddRating(id, value, sessionId);
+      setSubmitting(true)
+      await postAddRating(id, value, sessionId)
     } catch (error) {
-      setError(error.message);
+      setError(error.message)
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  }, 500);
+  }, 500)
 
   const {
     original_title: title,
@@ -62,7 +64,7 @@ export default function Card({
     genre_ids: genreIds,
     overview,
     id,
-  } = item;
+  } = item
 
   return (
     <div className="card">
@@ -70,9 +72,7 @@ export default function Card({
         <img src={imgSrc} alt="" />
       </div>
       <div className="card__description ">
-        <h1 className="card__description__title">
-          {title || 'N/A'}
-        </h1>
+        <h1 className="card__description__title">{title || 'N/A'}</h1>
         <div
           className="card__description__rating"
           style={{ borderColor: getBorderColor() }}
@@ -92,13 +92,13 @@ export default function Card({
             count={10}
             allowHalf
             onChange={(value) => {
-              debouncedPostAddRating(id, value, guestSessionId);
+              debouncedPostAddRating(id, value, guestSessionId)
             }}
           />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 Card.propTypes = {
@@ -112,10 +112,10 @@ Card.propTypes = {
   }),
   voteAverage: PropTypes.number,
   posterPath: PropTypes.string,
-};
+}
 
 Card.defaultProps = {
   item: {},
   voteAverage: 0,
   posterPath: '',
-};
+}

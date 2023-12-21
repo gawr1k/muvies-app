@@ -1,15 +1,16 @@
-import React from 'react';
-import './CardList.scss';
-import { Spin } from 'antd';
-import Card from '../Card/Card';
-import NoData from '../NoData/NoData';
-import PaginationsPages from '../PaginationsPages/PaginationsPages';
-import DataContext from '../../context/DataContext';
-import UIContext from '../../context/UIContext';
+import React from 'react'
+import './CardList.scss'
+import { Spin } from 'antd'
+
+import Card from '../Card/Card'
+import NoData from '../NoData/NoData'
+import PaginationsPages from '../PaginationsPages/PaginationsPages'
+import DataContext from '../../context/DataContext'
+import UIContext from '../../context/UIContext'
 
 export default function CardList() {
-  const { muviesRenderList } = React.useContext(DataContext);
-  const { loading } = React.useContext(UIContext);
+  const { muviesRenderList } = React.useContext(DataContext)
+  const { loading } = React.useContext(UIContext)
   return (
     <div>
       {loading ? (
@@ -35,10 +36,8 @@ export default function CardList() {
         </main>
       )}
       {muviesRenderList.total_pages > 1 && (
-        <footer>
-          {!loading && <PaginationsPages />}
-        </footer>
+        <footer>{!loading && <PaginationsPages />}</footer>
       )}
     </div>
-  );
+  )
 }

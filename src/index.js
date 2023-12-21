@@ -1,10 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import { App } from './App';
-import './fonts/Inter/font.css';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <App />,
-);
+import './index.css'
+import App from './App'
+import './assets/fonts/Inter/font.css'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(<App />)
