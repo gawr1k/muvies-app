@@ -5,8 +5,6 @@ import _ from 'lodash'
 
 import MuvieMenu from './components/Menu/Menu'
 import AlertAlarm from './components/AlertAlarm/AlertAlarm'
-import MenuStateContext from './context/MenuStateContext'
-import DataContext from './context/DataContext'
 import UIContext from './context/UIContext'
 import CardList from './components/CardList/CardList'
 import {
@@ -19,14 +17,8 @@ import {
 
 export default function App() {
   const [menustate, setMenuState] = useState('')
-  const menuContextValue = { menustate, setMenuState }
   const [muviesRenderList, setMuviesRenderList] = useState([])
   const [guestSessionId, setGuestSessionId] = useState([])
-  const dataContextValue = {
-    muviesRenderList,
-    setMuviesRenderList,
-    guestSessionId,
-  }
   const [searchTerm, setSearchTerm] = useState('open')
   const [ratedMovies, setRatedMovies] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
@@ -35,17 +27,9 @@ export default function App() {
   const [errorState, setError] = useState(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [errorMessage, setErrorMessage] = useState('')
-  const uiContextValue = {
-    loading,
-    genresList,
-    currentPage,
-    ratedMovies,
-    errorState,
-    setError,
-    setCurrentPage,
-    setSearchTerm,
-    setRatedMovies,
-  }
+  const uiContextValue = { genresList }
+  const OFFLINE_ERROR_MESSAGE =
+    'No internet connection. Please check your network settings.'
 
   useEffect(() => {
     const handleOnline = () => {
@@ -55,9 +39,7 @@ export default function App() {
 
     const handleOffline = () => {
       setIsOnline(false)
-      setErrorMessage(
-        'No internet connection. Please check your network settings.'
-      )
+      setErrorMessage(OFFLINE_ERROR_MESSAGE)
     }
 
     window.addEventListener('online', handleOnline)
@@ -137,36 +119,45 @@ export default function App() {
     <div className="container">
       <div className="content">
         <UIContext.Provider value={uiContextValue}>
-          <DataContext.Provider value={dataContextValue}>
-            <MenuStateContext.Provider value={menuContextValue}>
-              {isOnline ? (
-                <>
-                  {errorState && <AlertAlarm />}
-                  <header>
-                    <div className="menu-center">
-                      <MuvieMenu className="menu-center" />
-                    </div>
-                  </header>
-                  {menustate === '/search' && (
-                    <div className="input-container">
-                      <Input
-                        onChange={inputHandler}
-                        placeholder="Type to search..."
-                      />
-                    </div>
-                  )}
-                  <CardList />
-                </>
-              ) : (
-                <Alert
-                  className="custom-alert"
-                  message={errorMessage}
-                  type="error"
-                  showIcon
-                />
+          {isOnline ? (
+            <>
+              {errorState && (
+                <AlertAlarm errorState={errorState} setError={setError} />
               )}
-            </MenuStateContext.Provider>
-          </DataContext.Provider>
+              <header>
+                <div className="menu-center">
+                  <MuvieMenu
+                    className="menu-center"
+                    setMenuState={setMenuState}
+                    setCurrentPage={setCurrentPage}
+                  />
+                </div>
+              </header>
+              {menustate === '/search' && (
+                <div className="input-container">
+                  <Input
+                    onChange={inputHandler}
+                    placeholder="Type to search..."
+                  />
+                </div>
+              )}
+              <CardList
+                muviesRenderList={muviesRenderList}
+                loading={loading}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                guestSessionId={guestSessionId}
+                ratedMovies={ratedMovies}
+              />
+            </>
+          ) : (
+            <Alert
+              className="custom-alert"
+              message={errorMessage}
+              type="error"
+              showIcon
+            />
+          )}
         </UIContext.Provider>
       </div>
     </div>

@@ -2,13 +2,7 @@ import './PaginationPages.scss'
 import React from 'react'
 import { Pagination } from 'antd'
 
-import UIContext from '../../context/UIContext'
-import DataContext from '../../context/DataContext'
-
-function PaginationsPages() {
-  const { currentPage, setCurrentPage } = React.useContext(UIContext)
-  const { muviesRenderList } = React.useContext(DataContext)
-
+function PaginationsPages({ currentPage, setCurrentPage, muviesRenderList }) {
   const handlePageChange = (page) => {
     setCurrentPage(page)
   }

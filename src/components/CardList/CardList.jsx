@@ -5,12 +5,16 @@ import { Spin } from 'antd'
 import Card from '../Card/Card'
 import NoData from '../NoData/NoData'
 import PaginationsPages from '../PaginationsPages/PaginationsPages'
-import DataContext from '../../context/DataContext'
-import UIContext from '../../context/UIContext'
 
-export default function CardList() {
-  const { muviesRenderList } = React.useContext(DataContext)
-  const { loading } = React.useContext(UIContext)
+export default function CardList({
+  muviesRenderList,
+  loading,
+  setCurrentPage,
+  currentPage,
+  guestSessionId,
+  ratedMovies,
+  setError,
+}) {
   return (
     <div>
       {loading ? (
@@ -28,6 +32,9 @@ export default function CardList() {
                 posterPath={item.poster_path}
                 voteAverage={item.vote_average}
                 item={item}
+                guestSessionId={guestSessionId}
+                ratedMovies={ratedMovies}
+                setError={setError}
               />
             ))
           ) : (
@@ -36,7 +43,15 @@ export default function CardList() {
         </main>
       )}
       {muviesRenderList.total_pages > 1 && (
-        <footer>{!loading && <PaginationsPages />}</footer>
+        <footer>
+          {!loading && (
+            <PaginationsPages
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              muviesRenderList={muviesRenderList}
+            />
+          )}
+        </footer>
       )}
     </div>
   )

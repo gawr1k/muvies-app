@@ -2,18 +2,24 @@ import 'macro-css'
 import _ from 'lodash'
 import './Card.scss'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { Rate } from 'antd'
 
+import noPhoto from '../../assets/img/noPhoto.jpeg'
 import { postAddRating } from '../../ApiClient/ApiClient'
-import DataContext from '../../context/DataContext'
 import UIContext from '../../context/UIContext'
 
-export default function Card({ item, voteAverage, posterPath }) {
-  const { guestSessionId } = React.useContext(DataContext)
-  const [isSubmitting, setSubmitting] = React.useState(false)
-  const { genresList, ratedMovies, setError } = React.useContext(UIContext)
-  const PLACEHOLDER_IMAGE = './assets/img/noPhoto.jpeg'
+export default function Card({
+  item,
+  voteAverage,
+  posterPath,
+  guestSessionId,
+  ratedMovies,
+  setError,
+}) {
+  const [isSubmitting, setSubmitting] = useState(false)
+  const { genresList } = useContext(UIContext)
+  const PLACEHOLDER_IMAGE = noPhoto
   const BASE_URL = 'https://image.tmdb.org/t/p/original'
   const imgSrc = posterPath ? `${BASE_URL}${posterPath}` : PLACEHOLDER_IMAGE
 

@@ -15,7 +15,7 @@ async function getSearchMuvies(search, page) {
     },
   }
 
-  const response = await fetch(url.toString, options)
+  const response = await fetch(url.toString(), options)
   if (!response.ok) {
     throw new Error(`getSearchMuvies failed with status: ${response.status}`)
   }
@@ -34,7 +34,7 @@ const getCreateGuestSession = async () => {
     },
   }
 
-  const response = await fetch(url.toString, options)
+  const response = await fetch(url.toString(), options)
 
   if (!response.ok) {
     throw new Error(
