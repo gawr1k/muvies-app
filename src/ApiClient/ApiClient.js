@@ -3,6 +3,10 @@ import { defToken, apiKey } from './api-key'
 const BASE_URL = 'https://api.themoviedb.org/3'
 
 async function getSearchMuvies(search, page) {
+  const url = new URL(`${BASE_URL}/search/movie`)
+  url.searchParams.set('query', search)
+  url.searchParams.set('page', page)
+
   const options = {
     method: 'GET',
     headers: {
@@ -10,10 +14,8 @@ async function getSearchMuvies(search, page) {
       Authorization: defToken,
     },
   }
-  const response = await fetch(
-    `${BASE_URL}/search/movie?query=${search}&page=${page}`,
-    options
-  )
+
+  const response = await fetch(url.toString, options)
   if (!response.ok) {
     throw new Error(`getSearchMuvies failed with status: ${response.status}`)
   }
@@ -22,6 +24,8 @@ async function getSearchMuvies(search, page) {
 }
 
 const getCreateGuestSession = async () => {
+  const url = new URL(`${BASE_URL}/authentication/guest_session/new`)
+
   const options = {
     method: 'GET',
     headers: {
@@ -30,10 +34,7 @@ const getCreateGuestSession = async () => {
     },
   }
 
-  const response = await fetch(
-    `${BASE_URL}/authentication/guest_session/new`,
-    options
-  )
+  const response = await fetch(url.toString, options)
 
   if (!response.ok) {
     throw new Error(
@@ -46,6 +47,11 @@ const getCreateGuestSession = async () => {
 }
 
 const postAddRating = async (id, rate, guestSessionId) => {
+  const url = new URL(`${BASE_URL}/movie/${id}/rating`)
+  const searchParams = new URLSearchParams({
+    api_key: apiKey,
+    guest_session_id: guestSessionId,
+  })
   const options = {
     method: 'POST',
     headers: {
@@ -54,11 +60,9 @@ const postAddRating = async (id, rate, guestSessionId) => {
     },
     body: JSON.stringify({ value: rate }),
   }
+  url.search = searchParams.toString()
 
-  const response = await fetch(
-    `${BASE_URL}/movie/${id}/rating?api_key=${apiKey}&guest_session_id=${guestSessionId}`,
-    options
-  )
+  const response = await fetch(url.toString(), options)
 
   if (!response.ok) {
     throw new Error(`postAddRating failed with status: ${response.status}`)
@@ -69,9 +73,19 @@ const postAddRating = async (id, rate, guestSessionId) => {
 }
 
 const getRateFilm = async (guestSessionId, page) => {
-  const res = await fetch(
-    `${BASE_URL}/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
+  const url = new URL(
+    `${BASE_URL}/guest_session/${guestSessionId}/rated/movies`
   )
+  const searchParams = new URLSearchParams({
+    api_key: apiKey,
+    language: 'en-US',
+    page,
+    sort_by: 'created_at.asc',
+  })
+
+  url.search = searchParams.toString()
+
+  const res = await fetch(url.toString())
 
   if (!res.ok) {
     throw new Error(`getRateFilm failed with status: ${res.status}`)
@@ -82,9 +96,19 @@ const getRateFilm = async (guestSessionId, page) => {
 }
 
 const getRatingMovies = async (guestSessionId, page) => {
-  const res = await fetch(
-    `${BASE_URL}/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
+  const url = new URL(
+    `${BASE_URL}/guest_session/${guestSessionId}/rated/movies`
   )
+  const searchParams = new URLSearchParams({
+    api_key: apiKey,
+    language: 'en-US',
+    page,
+    sort_by: 'created_at.asc',
+  })
+
+  url.search = searchParams.toString()
+
+  const res = await fetch(url.toString())
 
   if (!res.ok) {
     throw new Error(`getRatingMovies failed with status: ${res.status}`)
@@ -122,6 +146,7 @@ const getRatingMovies = async (guestSessionId, page) => {
 }
 
 async function gethMovieGenres() {
+  const url = new URL(`${BASE_URL}/genre/movie/list`)
   const options = {
     method: 'GET',
     headers: {
@@ -130,10 +155,7 @@ async function gethMovieGenres() {
     },
   }
 
-  const response = await fetch(
-    `${BASE_URL}/genre/movie/list?language=en`,
-    options
-  )
+  const response = await fetch(url.toString(), options)
 
   if (!response.ok) {
     throw new Error(`gethMovieGenres failed with status: ${response.status}`)
@@ -142,7 +164,6 @@ async function gethMovieGenres() {
   const data = await response.json()
   return data
 }
-
 export {
   getSearchMuvies,
   postAddRating,
