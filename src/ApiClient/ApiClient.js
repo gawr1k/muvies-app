@@ -1,5 +1,7 @@
 import { defToken, apiKey } from './api-key'
 
+const BASE_URL = 'https://api.themoviedb.org/3'
+
 async function getSearchMuvies(search, page) {
   const options = {
     method: 'GET',
@@ -9,7 +11,7 @@ async function getSearchMuvies(search, page) {
     },
   }
   const response = await fetch(
-    `https://api.themoviedb.org/3/search/movie?query=${search}&page=${page}`,
+    `${BASE_URL}/search/movie?query=${search}&page=${page}`,
     options
   )
   if (!response.ok) {
@@ -29,7 +31,7 @@ const getCreateGuestSession = async () => {
   }
 
   const response = await fetch(
-    'https://api.themoviedb.org/3/authentication/guest_session/new',
+    `${BASE_URL}/authentication/guest_session/new`,
     options
   )
 
@@ -54,7 +56,7 @@ const postAddRating = async (id, rate, guestSessionId) => {
   }
 
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${id}/rating?api_key=${apiKey}&guest_session_id=${guestSessionId}`,
+    `${BASE_URL}/movie/${id}/rating?api_key=${apiKey}&guest_session_id=${guestSessionId}`,
     options
   )
 
@@ -68,7 +70,7 @@ const postAddRating = async (id, rate, guestSessionId) => {
 
 const getRateFilm = async (guestSessionId, page) => {
   const res = await fetch(
-    `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
+    `${BASE_URL}/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
   )
 
   if (!res.ok) {
@@ -81,7 +83,7 @@ const getRateFilm = async (guestSessionId, page) => {
 
 const getRatingMovies = async (guestSessionId, page) => {
   const res = await fetch(
-    `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
+    `${BASE_URL}/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
   )
 
   if (!res.ok) {
@@ -94,7 +96,7 @@ const getRatingMovies = async (guestSessionId, page) => {
 
   for (let currentPage = 1; currentPage <= totalPages; currentPage += 1) {
     const fetchPromise = fetch(
-      `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${currentPage}&sort_by=created_at.asc`
+      `${BASE_URL}/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&page=${currentPage}&sort_by=created_at.asc`
     ).then((response) => {
       if (!response.ok) {
         throw new Error(
@@ -129,7 +131,7 @@ async function gethMovieGenres() {
   }
 
   const response = await fetch(
-    'https://api.themoviedb.org/3/genre/movie/list?language=en',
+    `${BASE_URL}/genre/movie/list?language=en`,
     options
   )
 
